@@ -1,7 +1,7 @@
 <template>
   <oc-table-simple data-testid="list-resources-table">
     <oc-tr
-      v-for="resource in resources"
+      v-for="resource in resourcesSorted"
       :key="resource.viewId"
       :class="rowClasses(resource)"
       :data-testid="`list-resources-row-${resource.id}`"
