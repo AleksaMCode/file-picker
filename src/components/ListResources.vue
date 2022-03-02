@@ -5,16 +5,19 @@
       :key="resource.viewId"
       :class="rowClasses(resource)"
       :data-testid="`list-resources-row-${resource.id}`"
-      @click.native="toggleResourceSelection(resource)"
+      @click.native="
+        resource.type === 'folder' ? openFolder(resource.path) : toggleResourceSelection(resource)
+      "
     >
       <oc-td class="oc-pm uk-display-relative" width="shrink">
         <oc-checkbox
-          v-if="!isLocationPicker"
+          v-if="!isLocationPicker && resource.type !== 'folder'"
           class="file-picker-resource-checkbox uk-margin-small-left"
           :data-testid="`list-resources-checkbox-${resource.id}`"
           :value="isResourceSelected(resource)"
           :label="selectLabel(resource.name)"
           :hide-label="true"
+          :disabled="isRowDisabled(resource)"
           @click.native.stop
           @input="toggleResourceSelection(resource)"
         />
@@ -109,8 +112,12 @@ export default {
     },
 
     isRowDisabled(resource) {
+      if (resource.type === 'folder') {
+        return false
+      }
+
       if (this.isLocationPicker) {
-        return resource.type !== 'folder' || resource.canCreate() === false
+        return resource.canCreate() === false
       }
 
       return resource.canShare() === false
@@ -141,6 +148,10 @@ export default {
 
     selectLocation(location) {
       this.$emit('selectLocation', [location])
+    },
+
+    navigate(resource) {
+      this.$emit('navigate', resource.path)
     }
   }
 }
