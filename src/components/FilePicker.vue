@@ -1,5 +1,5 @@
 <template>
-  <div class="uk-flex uk-height-1-1 uk-flex-column uk-overflow-hidden">
+  <div class="uk-flex uk-height-1-1 uk-flex-column overflow-auto">
     <list-header
       :current-folder="currentFolder"
       :is-select-btn-enabled="isSelectBtnEnabled"
@@ -171,3 +171,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.overflow-auto {
+  overflow-y: auto;
+}
+</style>
