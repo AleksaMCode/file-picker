@@ -196,12 +196,12 @@ export default {
         return this.initApp()
       }
 
-      this.state = 'unauthorized'
-
       // If the user is not authenticated, we add event listener when he logs in to automatically init the application afterwards
       this.authInstance.mgr.events.addUserLoaded(() => {
         this.initApp()
       })
+
+      this.authInstance.authenticate()
     },
 
     authenticate() {
