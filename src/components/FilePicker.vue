@@ -1,5 +1,5 @@
 <template>
-  <div class="uk-flex uk-height-1-1 uk-flex-column overflow-auto">
+  <div class="uk-flex uk-height-1-1 uk-flex-column">
     <list-header
       :current-folder="currentFolder"
       :is-select-btn-enabled="isSelectBtnEnabled"
@@ -19,16 +19,18 @@
     >
       <oc-spinner :aria-label="$gettext('Loading resources')" />
     </div>
-    <list-resources
-      v-if="state === 'loaded'"
-      key="resources-list"
-      class="uk-flex-1 oc-border"
-      :resources="resources"
-      :is-location-picker="isLocationPicker"
-      @openFolder="loadFolder"
-      @selectResources="selectResources"
-      @selectLocation="emitSelectBtnClick"
-    />
+    <div class="overflow-y-auto">
+      <list-resources
+        v-if="state === 'loaded'"
+        key="resources-list"
+        class="uk-flex-1 oc-border"
+        :resources="resources"
+        :is-location-picker="isLocationPicker"
+        @openFolder="loadFolder"
+        @selectResources="selectResources"
+        @selectLocation="emitSelectBtnClick"
+      />
+    </div>
   </div>
 </template>
 
@@ -173,7 +175,7 @@ export default {
 </script>
 
 <style lang="scss">
-.overflow-auto {
+.overflow-y-auto {
   overflow-y: auto;
 }
 </style>

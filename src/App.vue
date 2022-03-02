@@ -6,7 +6,6 @@
     >
       <oc-spinner :aria-label="$gettext('Loading ownCloud File Picker')" />
     </div>
-    <login v-if="state === 'unauthorized'" key="login-form" @login="authenticate" />
     <file-picker
       v-if="state === 'authorized'"
       key="file-picker"
@@ -43,7 +42,6 @@ import filePickerTranslations from '../l10n/translations.json'
 import odsTranslations from 'owncloud-design-system/dist/system/translations.json'
 
 import FilePicker from './components/FilePicker.vue'
-import Login from './components/Login.vue'
 
 if (!Vue.prototype.$gettext) {
   const supportedLanguages = {
@@ -69,8 +67,7 @@ export default {
   name: 'App',
 
   components: {
-    FilePicker,
-    Login
+    FilePicker
   },
 
   props: {
@@ -238,5 +235,11 @@ export default {
 
 * {
   font-family: 'Source Sans Pro', sans-serif;
+}
+
+html,
+body,
+#oc-file-picker {
+  height: 100%;
 }
 </style>
