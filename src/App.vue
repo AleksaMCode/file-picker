@@ -1,5 +1,6 @@
 <template>
   <div id="oc-file-picker" tabindex="-1" @keyup.esc="cancel">
+    <link rel="stylesheet" href="styles.css" />
     <div
       v-if="state === 'loading'"
       class="uk-height-1-1 uk-width-1-1 uk-flex uk-flex-middle uk-flex-center oc-border"
