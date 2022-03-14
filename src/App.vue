@@ -162,6 +162,10 @@ export default {
     initApp() {
       if (!this.isSdkProvided) {
         const bearerToken = this.bearerToken || this.authInstance.getToken()
+        const userObject = this.authInstance.getStoredUserObject()
+        if (userObject) {
+          sessionStorage.setItem('sub', userObject.profile.preferred_username)
+        }
 
         // Init owncloud-sdk
         this.$client.init({

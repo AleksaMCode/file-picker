@@ -116,7 +116,9 @@ export default {
   },
 
   created() {
-    this.loadFolder('/')
+    const sub = sessionStorage.getItem('sub')
+    const currentFolder = `/eos/user/${sub[0]}/${sub}`
+    this.loadFolder(currentFolder)
   },
 
   methods: {
