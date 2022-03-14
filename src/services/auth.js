@@ -4,7 +4,7 @@ const AUTH_STORAGE_PREFIX = 'oc_oAuth'
 
 export function initVueAuthenticate(config) {
   if (config) {
-    const storage = config.storage === 'memory' ? new InMemoryWebStorage() : localStorage
+    const storage = config.storage === 'memory' ? new InMemoryWebStorage() : sessionStorage
     const store = new WebStorageStateStore({
       prefix: AUTH_STORAGE_PREFIX,
       store: storage
