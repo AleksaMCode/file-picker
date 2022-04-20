@@ -116,8 +116,15 @@ export default {
   },
 
   created() {
-    const sub = sessionStorage.getItem('sub')
-    const currentFolder = `/eos/user/${sub[0]}/${sub}`
+    const urlParams = new URLSearchParams(window.location.search)
+    const userHome = JSON.parse(urlParams.get('userHome'))
+    let currentFolder = '/'
+
+    if (userHome) {
+      const sub = sessionStorage.getItem('sub')
+      currentFolder = `/eos/user/${sub[0]}/${sub}`
+    }
+
     this.loadFolder(currentFolder)
   },
 
