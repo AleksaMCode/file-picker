@@ -135,7 +135,9 @@ export default {
       this.$client.files
         .list(decodeURIComponent(path), 1, this.davProperties)
         .then((resources) => {
-          const filteredResources = resources.filter((r) => !r.name.startsWith('/.'))
+          const filteredResources = resources.filter(
+            (r) => !r.name.split('/').pop().startsWith('.')
+          )
           resources = filteredResources.map((resource) => buildResource(resource))
           this.resources = resources.splice(1)
           this.currentFolder = resources[0]
