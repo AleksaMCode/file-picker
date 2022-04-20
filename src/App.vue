@@ -1,6 +1,6 @@
 <template>
   <div id="oc-file-picker" tabindex="-1" @keyup.esc="cancel">
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" :href="`${style}-styles.css`" />
     <div
       v-if="state === 'loading'"
       class="uk-height-1-1 uk-width-1-1 uk-flex uk-flex-middle uk-flex-center oc-border"
@@ -138,6 +138,11 @@ export default {
   computed: {
     currentLocale() {
       return this.locale || navigator.language.substring(0, 2)
+    },
+    style() {
+      const urlParams = new URLSearchParams(window.location.search)
+      const style = urlParams.get('style')
+      return style ? style : 'light'
     }
   },
 
