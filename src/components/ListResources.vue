@@ -37,6 +37,7 @@
         />
       </oc-td>
     </oc-tr>
+    <oc-tr v-if="!resourcesSorted.length" class="row-empty">This folder is empty</oc-tr>
   </oc-table-simple>
 </template>
 
@@ -177,5 +178,11 @@ export default {
     z-index: 1;
     pointer-events: auto;
   }
+}
+
+.row-empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
