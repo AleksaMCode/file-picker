@@ -7,6 +7,13 @@
     >
       <oc-spinner :aria-label="$gettext('Loading ownCloud File Picker')" />
     </div>
+    <div
+      v-if="state === 'enablePopups'"
+      class="uk-height-1-1 uk-width-1-1 uk-flex uk-flex-middle uk-flex-center oc-border"
+    >
+      There was an error opening the authentication popup. Please allow popups in your browser and
+      then reload this page.
+    </div>
     <file-picker
       v-if="state === 'authorized'"
       key="file-picker"
@@ -208,11 +215,15 @@ export default {
         this.initApp()
       })
 
-      this.authInstance.authenticate()
+      this.authInstance.authenticate().catch(() => {
+        this.state = 'enablePopups'
+      })
     },
 
     authenticate() {
-      this.authInstance.authenticate()
+      this.authInstance.authenticate().catch(() => {
+        this.state = 'enablePopups'
+      })
     },
 
     selectResources(resources) {
