@@ -93,6 +93,7 @@ export default {
       '{http://owncloud.org/ns}share-types',
       '{http://owncloud.org/ns}privatelink',
       '{DAV:}getcontentlength',
+      '{DAV:}getcontenttype',
       '{http://owncloud.org/ns}size',
       '{DAV:}getlastmodified',
       '{DAV:}getetag',
@@ -132,13 +133,27 @@ export default {
     loadFolder(path) {
       this.state = 'loading'
 
+      const urlParams = new URLSearchParams(window.location.search)
+      const mimeTypesParam = urlParams.get('mimeTypes')
+      const mimeTypes = mimeTypesParam && mimeTypesParam.split(',')
+
       this.$client.files
         .list(decodeURIComponent(path), 1, this.davProperties)
         .then((resources) => {
-          const filteredResources = resources.filter(
+          const filterHiddenResources = resources.filter(
             (r) => !r.name.split('/').pop().startsWith('.')
           )
-          resources = filteredResources.map((resource) => buildResource(resource))
+          const filterMimeResources = mimeTypes
+            ? filterHiddenResources.filter((r) => {
+                if (r.type === 'dir') return true
+
+                return (
+                  r.fileInfo['{DAV:}getcontenttype'] &&
+                  mimeTypes.includes(r.fileInfo['{DAV:}getcontenttype'])
+                )
+              })
+            : filterHiddenResources
+          resources = filterMimeResources.map((resource) => buildResource(resource))
           this.resources = resources.splice(1)
           this.currentFolder = resources[0]
 
