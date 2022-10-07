@@ -40,6 +40,7 @@ import ListResources from './ListResources.vue'
 import ListHeader from './ListHeader.vue'
 
 import MixinAccessibility from '@/mixins/accessibility'
+import { isSearchParamTruthy } from '../helpers/utils'
 
 export default {
   name: 'FilePicker',
@@ -117,8 +118,7 @@ export default {
   },
 
   created() {
-    const urlParams = new URLSearchParams(window.location.search)
-    const userHome = JSON.parse(urlParams.get('userHome'))
+    const userHome = isSearchParamTruthy('userHome')
     let currentFolder = '/'
 
     if (userHome) {

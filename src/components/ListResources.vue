@@ -37,7 +37,17 @@
         />
       </oc-td>
     </oc-tr>
-    <oc-tr v-if="!resourcesSorted.length" class="row-empty">This folder is empty</oc-tr>
+    <oc-tr v-if="!resourcesSorted.length" class="row-empty">
+      <span class="oc-resource-basename">{{ emptyFolderMessage }}</span>
+      <template v-if="!resourcesSorted.length">
+        <div class="extension-list">
+          <div v-for="mimeType in allowedMimeTypeList" :key="mimeType" class="extension-item">
+            <span class="oc-resource-basename">{{ mimeType.extensions.join(', ') }}</span>
+            <span class="uk-text-meta"> ({{ mimeType.description }})</span>
+          </div>
+        </div>
+      </template>
+    </oc-tr>
   </oc-table-simple>
 </template>
 
@@ -45,6 +55,7 @@
 import path from 'path'
 
 import { sortByName } from '../helpers/sort'
+import mimeTypes from '../assets/mimeTypes.json'
 
 import Resource from './Resource.vue'
 
@@ -74,6 +85,21 @@ export default {
   computed: {
     resourcesSorted() {
       return this.sortResources(this.resources)
+    },
+    allowedMimeTypes() {
+      const urlParams = new URLSearchParams(window.location.search)
+      const mimeTypesParam = urlParams.get('mimeTypes')
+      return mimeTypesParam && mimeTypesParam.split(',')
+    },
+    allowedMimeTypeList() {
+      return mimeTypes.filter((mimeType) =>
+        mimeType.mimeTypes.some((m) => this.allowedMimeTypes.includes(m))
+      )
+    },
+    emptyFolderMessage() {
+      return this.allowedMimeTypes.length
+        ? 'This folder does not contain any files with the following extensions:'
+        : 'This folder is empty'
     }
   },
 
@@ -182,7 +208,19 @@ export default {
 
 .row-empty {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin: 1rem 0;
+  height: auto !important;
+}
+
+.extension-list {
+  margin-top: 2rem;
+  min-width: 300px;
+}
+
+.extension-item:not(:last-child) {
+  margin-bottom: 0.33rem;
 }
 </style>

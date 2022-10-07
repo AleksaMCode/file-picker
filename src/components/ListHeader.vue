@@ -21,11 +21,19 @@
         v-text="submitBtnLabel"
       />
     </div>
+    <oc-button
+      v-if="showHome"
+      class="oc-button-gap-m oc-button-passive oc-button-passive-raw"
+      @click="openHome"
+    >
+      <oc-icon name="home" />
+    </oc-button>
   </header>
 </template>
 
 <script>
 import path from 'path'
+import { isSearchParamTruthy } from '../helpers/utils'
 
 export default {
   name: 'ListHeader',
@@ -92,6 +100,17 @@ export default {
       return breadcrumbs
     },
 
+    showHome() {
+      const sub = sessionStorage.getItem('sub')
+      const userHome = `/eos/user/${sub[0]}/${sub}`
+
+      return (
+        isSearchParamTruthy('userHome') &&
+        this.currentFolder &&
+        this.currentFolder.path !== userHome
+      )
+    },
+
     disabledSelectBtnTooltip() {
       if (this.isSelectBtnEnabled) {
         return null
@@ -122,6 +141,12 @@ export default {
       this.$emit('openFolder', path)
     },
 
+    openHome() {
+      const sub = sessionStorage.getItem('sub')
+      const userHome = `/eos/user/${sub[0]}/${sub}`
+
+      this.$emit('openFolder', userHome)
+    },
     select() {
       this.$emit('select')
     },
