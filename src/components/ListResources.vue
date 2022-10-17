@@ -39,7 +39,7 @@
     </oc-tr>
     <oc-tr v-if="!resourcesSorted.length" class="row-empty">
       <span class="oc-resource-basename">{{ emptyFolderMessage }}</span>
-      <template v-if="!resourcesSorted.length">
+      <template v-if="!isLocationPicker && !resourcesSorted.length && allowedMimeTypeList.length">
         <div class="extension-list">
           <div v-for="mimeType in allowedMimeTypeList" :key="mimeType" class="extension-item">
             <span class="oc-resource-basename">{{ mimeType.extensions.join(', ') }}</span>
@@ -75,6 +75,11 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    variation: {
+      type: String,
+      required: true,
+      validator: (value) => value === 'resource' || 'location'
     }
   },
 
@@ -89,7 +94,7 @@ export default {
     allowedMimeTypes() {
       const urlParams = new URLSearchParams(window.location.search)
       const mimeTypesParam = urlParams.get('mimeTypes')
-      return mimeTypesParam && mimeTypesParam.split(',')
+      return (mimeTypesParam && mimeTypesParam.split(',')) || []
     },
     allowedMimeTypeList() {
       return mimeTypes.filter((mimeType) =>
@@ -97,9 +102,9 @@ export default {
       )
     },
     emptyFolderMessage() {
-      return this.allowedMimeTypes.length
-        ? 'This folder does not contain any files with the following extensions:'
-        : 'This folder is empty'
+      return this.isLocationPicker || !this.allowedMimeTypes.length
+        ? 'This folder is empty'
+        : 'This folder does not contain any files with the following extensions:'
     }
   },
 

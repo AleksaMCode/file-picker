@@ -143,16 +143,17 @@ export default {
           const filterHiddenResources = resources.filter(
             (r) => !r.name.split('/').pop().startsWith('.')
           )
-          const filterMimeResources = mimeTypes
-            ? filterHiddenResources.filter((r) => {
-                if (r.type === 'dir') return true
+          const filterMimeResources =
+            this.variation === 'resource' && mimeTypes
+              ? filterHiddenResources.filter((r) => {
+                  if (r.type === 'dir') return true
 
-                return (
-                  r.fileInfo['{DAV:}getcontenttype'] &&
-                  mimeTypes.includes(r.fileInfo['{DAV:}getcontenttype'])
-                )
-              })
-            : filterHiddenResources
+                  return (
+                    r.fileInfo['{DAV:}getcontenttype'] &&
+                    mimeTypes.includes(r.fileInfo['{DAV:}getcontenttype'])
+                  )
+                })
+              : filterHiddenResources
           resources = filterMimeResources.map((resource) => buildResource(resource))
           this.resources = resources.splice(1)
           this.currentFolder = resources[0]
