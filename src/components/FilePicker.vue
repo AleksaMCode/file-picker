@@ -119,14 +119,19 @@ export default {
 
   created() {
     const userHome = isSearchParamTruthy('userHome')
-    let currentFolder = '/'
+    let startPath = '/'
 
+    // userHome param takes priority
     if (userHome) {
       const sub = sessionStorage.getItem('sub')
-      currentFolder = `/eos/user/${sub[0]}/${sub}`
+      startPath = `/eos/user/${sub[0]}/${sub}`
+    } else {
+    // if userHome is unset, look for startPath param or start in root
+      const urlParams = new URLSearchParams(window.location.search)
+      startPath = urlParams.get('startPath') || startPath
     }
 
-    this.loadFolder(currentFolder)
+    this.loadFolder(startPath)
   },
 
   methods: {
