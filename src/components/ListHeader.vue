@@ -33,7 +33,6 @@
 
 <script>
 import path from 'path'
-import { isSearchParamTruthy } from '../helpers/utils'
 
 export default {
   name: 'ListHeader',
@@ -102,13 +101,10 @@ export default {
 
     showHome() {
       const sub = sessionStorage.getItem('sub')
+      // TODO: make eos optional
       const userHome = `/eos/user/${sub[0]}/${sub}`
 
-      return (
-        isSearchParamTruthy('userHome') &&
-        this.currentFolder &&
-        this.currentFolder.path !== userHome
-      )
+      return this.currentFolder && this.currentFolder.path !== userHome
     },
 
     disabledSelectBtnTooltip() {
@@ -143,6 +139,7 @@ export default {
 
     openHome() {
       const sub = sessionStorage.getItem('sub')
+      // TODO: make eos optional
       const userHome = `/eos/user/${sub[0]}/${sub}`
 
       this.$emit('openFolder', userHome)
